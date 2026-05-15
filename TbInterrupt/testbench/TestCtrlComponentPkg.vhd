@@ -49,8 +49,6 @@ library OSVVM ;
 library OSVVM_AXI4 ;
   context OSVVM_AXI4.Axi4Context ; 
 
-use work.OsvvmTestCommonPkg.all ;
-
 package TestCtrlComponentPkg is
   component TestCtrl is
     port (

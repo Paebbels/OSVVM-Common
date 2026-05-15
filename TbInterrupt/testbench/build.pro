@@ -41,7 +41,14 @@
 TestSuite InterruptHandler_Gen
 library   InterruptHandler_Gen
 
-analyze    TestCtrl_e.vhd
+if {$::osvvm::VhdlVersion >= 2019 && $::osvvm::Supports2019Interface}  {
+  analyze    TestCtrl_e.vhd
+  analyze    TestCtrlComponentPkg.vhd
+} else {
+  analyze    deprecated/TestCtrl_e_c.vhd
+  analyze    deprecated/TestCtrlComponentPkg_c.vhd
+}
+
 if {$::osvvm::ToolName ne "GHDL"} { 
   analyze    TbAddressBusMemory.vhd
 } else {
