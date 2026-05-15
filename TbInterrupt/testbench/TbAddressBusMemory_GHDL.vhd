@@ -282,6 +282,23 @@ begin
   ) ;
     
   ------------------------------------------------------------
+  InterruptGen : for i in InterruptRecArray'range generate
+  ------------------------------------------------------------
+    InterruptGeneratorBit_1 : InterruptGeneratorBit 
+    generic map (
+      MODEL_ID_NAME    => "InterruptGeneratorBit_" & to_string(i),
+      POLARITY         => '1'
+    ) 
+    port map (
+      -- Interrupt Input
+      IntReq          => IntReq(i), 
+      
+      -- Transaction port
+      TransRec        => InterruptRecArray(i)
+    ) ;
+  end generate InterruptGen ;
+
+  ------------------------------------------------------------
   Memory_1 : Axi4Memory
   ------------------------------------------------------------
   port map (
@@ -337,23 +354,6 @@ begin
     -- To Verification Component
     VCRec        => VCRec
   ) ;
-
-  ------------------------------------------------------------
-  InterruptGen : for i in InterruptRecArray'range generate
-  ------------------------------------------------------------
-    InterruptGeneratorBit_1 : InterruptGeneratorBit 
-    generic map (
-      MODEL_ID_NAME    => "InterruptGeneratorBit_" & to_string(i),
-      POLARITY         => '1'
-    ) 
-    port map (
-      -- Interrupt Input
-      IntReq          => IntReq(i), 
-      
-      -- Transaction port
-      TransRec        => InterruptRecArray(i)
-    ) ;
-  end generate InterruptGen ;
 
   ------------------------------------------------------------
   Monitor : process(IntReq)

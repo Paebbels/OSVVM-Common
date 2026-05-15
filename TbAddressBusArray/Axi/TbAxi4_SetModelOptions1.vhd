@@ -154,10 +154,12 @@ begin
           SetAxi4Options(ManagerRec, 1, WRITE_RESPONSE_READY_BEFORE_VALID,    BoolExpected) ;      
         when 2 =>
           -- Set with SetModelOptions 
-          SetModelOptions(ManagerRec, 1, Axi4OptionsType'pos(WRITE_RESPONSE_READY_BEFORE_VALID),    boolean'pos(BoolExpected)) ;      
+          -- SetModelOptions(ManagerRec, 1, Axi4OptionsType'pos(WRITE_RESPONSE_READY_BEFORE_VALID),    boolean'pos(BoolExpected)) ;      
+          set(ManagerRec(1).params, Axi4OptionsType'pos(WRITE_RESPONSE_READY_BEFORE_VALID),  BoolExpected) ;
         when 3 =>
           -- Set with SetModelOptions 
-          SetModelOptions(ManagerRec, 1, Axi4OptionsType'pos(WRITE_RESPONSE_READY_BEFORE_VALID),    boolean'pos(BoolExpected)) ;      
+          -- SetModelOptions(ManagerRec, 1, Axi4OptionsType'pos(WRITE_RESPONSE_READY_BEFORE_VALID),    boolean'pos(BoolExpected)) ;      
+          set(ManagerRec(1).params, Axi4OptionsType'pos(WRITE_RESPONSE_READY_BEFORE_VALID),  BoolExpected) ;
         when 4 =>
           -- Set with SetAxi4Options 
           SetAxi4Options(ManagerRec, 1, WRITE_RESPONSE_READY_BEFORE_VALID,    BoolExpected) ;      
@@ -169,8 +171,10 @@ begin
       AffirmIfEqual(TbManagerID, BoolOption, BoolExpected, "WRITE_RESPONSE_READY_BEFORE_VALID") ;
       
       -- Use GetModelOptions
-      GetModelOptions(ManagerRec, 1, Axi4OptionsType'pos(WRITE_RESPONSE_READY_BEFORE_VALID),   IntOption) ;      -- config: 8 bits
-      AffirmIfEqual(TbManagerID, boolean'val(IntOption),   BoolExpected, "WRITE_RESPONSE_READY_BEFORE_VALID") ;  
+      BoolOption := Get(ManagerRec(1).params, Axi4OptionsType'pos(WRITE_RESPONSE_READY_BEFORE_VALID)) ;      
+      AffirmIfEqual(TbManagerID, BoolOption,   BoolExpected, "WRITE_RESPONSE_READY_BEFORE_VALID") ;  
+--      GetModelOptions(ManagerRec, 1, Axi4OptionsType'pos(WRITE_RESPONSE_READY_BEFORE_VALID),   IntOption) ;      -- config: 8 bits
+--      AffirmIfEqual(TbManagerID, boolean'val(IntOption),   BoolExpected, "WRITE_RESPONSE_READY_BEFORE_VALID") ;  
     end loop ; 
     
     WaitForClock(ManagerRec, 1, 4) ; 
@@ -247,10 +251,12 @@ begin
           SetAxi4Options(SubordinateRec, 1, WRITE_ADDRESS_READY_BEFORE_VALID,    BoolExpected) ;      
         when 2 =>
           -- Set with SetModelOptions 
-          SetModelOptions(SubordinateRec, 1, Axi4OptionsType'pos(WRITE_ADDRESS_READY_BEFORE_VALID),    boolean'pos(BoolExpected)) ;      
+          -- SetModelOptions(SubordinateRec, 1, Axi4OptionsType'pos(WRITE_ADDRESS_READY_BEFORE_VALID),    boolean'pos(BoolExpected)) ;      
+          set(SubordinateRec(1).params, Axi4OptionsType'pos(WRITE_ADDRESS_READY_BEFORE_VALID),  BoolExpected) ;
         when 3 =>
           -- Set with SetModelOptions 
-          SetModelOptions(SubordinateRec, 1, Axi4OptionsType'pos(WRITE_ADDRESS_READY_BEFORE_VALID),    boolean'pos(BoolExpected)) ;      
+          -- SetModelOptions(SubordinateRec, 1, Axi4OptionsType'pos(WRITE_ADDRESS_READY_BEFORE_VALID),    boolean'pos(BoolExpected)) ;      
+          set(SubordinateRec(1).params, Axi4OptionsType'pos(WRITE_ADDRESS_READY_BEFORE_VALID),  BoolExpected) ;
         when 4 =>
           -- Set with SetAxi4Options 
           SetAxi4Options(SubordinateRec, 1, WRITE_ADDRESS_READY_BEFORE_VALID,    BoolExpected) ;      
@@ -262,8 +268,10 @@ begin
       AffirmIfEqual(TbSubordinateID, BoolOption, BoolExpected, "WRITE_ADDRESS_READY_BEFORE_VALID") ;
       
       -- Use GetModelOptions
-      GetModelOptions(SubordinateRec, 1, Axi4OptionsType'pos(WRITE_ADDRESS_READY_BEFORE_VALID),   IntOption) ;      -- config: 8 bits
-      AffirmIfEqual(TbSubordinateID, boolean'val(IntOption),   BoolExpected, "WRITE_ADDRESS_READY_BEFORE_VALID") ;  
+      -- GetModelOptions(SubordinateRec, 1, Axi4OptionsType'pos(WRITE_ADDRESS_READY_BEFORE_VALID),   IntOption) ;      -- config: 8 bits
+      -- AffirmIfEqual(TbSubordinateID, boolean'val(IntOption),   BoolExpected, "WRITE_ADDRESS_READY_BEFORE_VALID") ;  
+      BoolOption := Get(SubordinateRec(1).params, Axi4OptionsType'pos(WRITE_ADDRESS_READY_BEFORE_VALID)) ;      
+      AffirmIfEqual(TbSubordinateID, BoolOption,   BoolExpected, "WRITE_ADDRESS_READY_BEFORE_VALID") ;  
     end loop ; 
 
     WaitForClock(SubordinateRec, 1, 2) ;
