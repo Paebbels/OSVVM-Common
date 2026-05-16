@@ -63,11 +63,11 @@ package InterruptHandlerComponentPkg is
     IntReq       : in   std_logic_vector(gIntReq'range) ;
 
     -- From TestCtrl
-    TransRec     : inout AddressBusRecType ;
-    InterruptRec : inout AddressBusRecType ;
+    TransRec     : view AddressBusVerificationComponentView of AddressBusRecType ;
+    InterruptRec : view AddressBusVerificationComponentView of AddressBusRecType ;
     
     -- To Verification Component
-    VCRec        : inout AddressBusRecType
+    VCRec        : view AddressBusTestCtrlView of AddressBusRecType
   ) ;
   end component InterruptHandler ;
   
