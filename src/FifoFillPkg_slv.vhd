@@ -375,8 +375,8 @@ package body FifoFillPkg_slv is
     constant VectorOfWords  : in    integer_vector ;
     constant FifoWidth      : in    integer
   ) is
-    constant WORD_MOD : integer := 2**FifoWidth ;
     constant FifoWidthLessThanIntegerBits : boolean := FifoWidth < NUMBER_POSITIVE_INTEGER_BITS ;
+    constant WORD_MOD : integer := 2** ifelse(FifoWidthLessThanIntegerBits, FifoWidth, 30) ;
   begin
     for i in VectorOfWords'range loop 
       if VectorOfWords(i) < 0 then 
@@ -413,8 +413,8 @@ package body FifoFillPkg_slv is
     constant FifoWidth    : in    integer := 8
   ) is
     variable intFirstWord : integer ; 
-    constant WORD_MOD : integer := 2**FifoWidth ;
     constant FifoWidthLessThanIntegerBits : boolean := FifoWidth < NUMBER_POSITIVE_INTEGER_BITS ;
+    constant WORD_MOD : integer := 2** ifelse(FifoWidthLessThanIntegerBits, FifoWidth, 30) ;
     variable Word : std_logic_vector(FifoWidth-1 downto 0) ;
   begin
     if FirstWord < 0 then 
@@ -575,8 +575,8 @@ package body FifoFillPkg_slv is
     constant VectorOfWords  : in    integer_vector ;
     constant FifoWidth      : in    integer 
   ) is
-    constant WORD_MOD : integer := 2**FifoWidth ;
     constant FifoWidthLessThanIntegerBits : boolean := FifoWidth < NUMBER_POSITIVE_INTEGER_BITS ;
+    constant WORD_MOD : integer := 2** ifelse(FifoWidthLessThanIntegerBits, FifoWidth, 30) ;
   begin
     for i in VectorOfWords'range loop 
       if VectorOfWords(i) < 0 then 
@@ -613,8 +613,8 @@ package body FifoFillPkg_slv is
     constant FifoWidth    : in    integer := 8
   ) is
     variable intFirstWord : integer ; 
-    constant WORD_MOD : integer := 2**FifoWidth ;
     constant FifoWidthLessThanIntegerBits : boolean := FifoWidth < NUMBER_POSITIVE_INTEGER_BITS ;
+    constant WORD_MOD : integer := 2** ifelse(FifoWidthLessThanIntegerBits, FifoWidth, 30) ;
     variable Word : std_logic_vector(FifoWidth-1 downto 0) ;
   begin
     if FirstWord < 0 then 
