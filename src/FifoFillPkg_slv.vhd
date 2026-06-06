@@ -354,7 +354,7 @@ end package FifoFillPkg_slv ;
 -- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 package body FifoFillPkg_slv is
-  constant NUMBER_POSITIVE_INTEGER_BITS : integer := 31 ; 
+  constant NUMBER_POSITIVE_INTEGER_BITS : integer := osvvm.LanguageSupport2019Pkg.INTEGER_WIDTH - 1 ; 
 
   ------------------------------------------------------------
   procedure PushBurstVector (
@@ -375,12 +375,14 @@ package body FifoFillPkg_slv is
     constant VectorOfWords  : in    integer_vector ;
     constant FifoWidth      : in    integer
   ) is
+    constant FifoWidthLessThanIntegerBits : boolean := FifoWidth < NUMBER_POSITIVE_INTEGER_BITS ;
+    constant WORD_MOD : integer := 2** ifelse(FifoWidthLessThanIntegerBits, FifoWidth, 30) ;
   begin
     for i in VectorOfWords'range loop 
       if VectorOfWords(i) < 0 then 
         Push(Fifo, (FifoWidth downto 1 => 'U')) ;
-      elsif FifoWidth < NUMBER_POSITIVE_INTEGER_BITS then 
-        Push(Fifo, to_slv(VectorOfWords(i) mod (2**FifoWidth), FifoWidth)) ;
+      elsif FifoWidthLessThanIntegerBits then 
+        Push(Fifo, to_slv(VectorOfWords(i) mod WORD_MOD, FifoWidth)) ;
       else 
         Push(Fifo, to_slv(VectorOfWords(i), FifoWidth)) ;
       end if ; 
@@ -394,9 +396,11 @@ package body FifoFillPkg_slv is
     constant FirstWord      : In    std_logic_vector ;
     constant Count          : In    integer 
   ) is
+    variable Word : std_logic_vector(FirstWord'length-1 downto 0) := FirstWord;
   begin
     for i in 0 to Count-1 loop
-      Push( Fifo, FirstWord+i ) ;
+      Push(Fifo, Word) ;
+      Word := Word + 1 ;
     end loop ; 
   end procedure PushBurstIncrement ;
   
@@ -409,20 +413,23 @@ package body FifoFillPkg_slv is
     constant FifoWidth    : in    integer := 8
   ) is
     variable intFirstWord : integer ; 
-    variable AdjFirstWord : std_logic_vector(FifoWidth-1 downto 0) ;
+    constant FifoWidthLessThanIntegerBits : boolean := FifoWidth < NUMBER_POSITIVE_INTEGER_BITS ;
+    constant WORD_MOD : integer := 2** ifelse(FifoWidthLessThanIntegerBits, FifoWidth, 30) ;
+    variable Word : std_logic_vector(FifoWidth-1 downto 0) ;
   begin
     if FirstWord < 0 then 
       intFirstWord := -FirstWord ; 
     else
       intFirstWord := FirstWord ; 
     end if ; 
-    if FifoWidth < NUMBER_POSITIVE_INTEGER_BITS then 
-      AdjFirstWord := to_slv(intFirstWord mod (2**FifoWidth), FifoWidth) ;
+    if FifoWidthLessThanIntegerBits then 
+      Word := to_slv(intFirstWord mod WORD_MOD, FifoWidth) ;
     else
-      AdjFirstWord := to_slv(intFirstWord, FifoWidth) ;
+      Word := to_slv(intFirstWord, FifoWidth) ;
     end if ; 
     for i in 0 to Count-1 loop 
-      Push( Fifo, AdjFirstWord+i ) ;
+      Push(Fifo, Word) ;
+      Word := Word + 1 ;
     end loop ;
   end procedure PushBurstIncrement ;
   
@@ -435,7 +442,6 @@ package body FifoFillPkg_slv is
   ) is
     variable RV         : RandomPType ; 
     alias    aFirstWord : std_logic_vector(FirstWord'length-1 downto 0) is FirstWord ; 
---x    constant FW_LEFT    : integer := minimum(30, FirstWord'length) - 1 ;
   begin
     RV.InitSeed(to_integer(MetaTo01(aFirstWord(minimum(30, FirstWord'length) - 1 downto 0))) + Count, UseNewSeedMethods => TRUE) ;
     Push( Fifo, FirstWord ) ;
@@ -453,8 +459,6 @@ package body FifoFillPkg_slv is
     constant FifoWidth    : in    integer := 8
   ) is
     variable intFirstWord : integer ; 
---    variable RV : RandomPType ; 
---    variable SlvWord : std_logic_vector(FifoWidth-1 downto 0) ; 
   begin
     if FirstWord < 0 then 
       intFirstWord := -FirstWord ; 
@@ -463,22 +467,6 @@ package body FifoFillPkg_slv is
     end if ; 
 
     PushBurstRandom(Fifo, to_slv(intFirstWord, FifoWidth), Count) ; 
-    
---    -- Initialize seed and toss first random value  
---    RV.InitSeed(intFirstWord mod 2**30 + Count, UseNewSeedMethods => TRUE) ;
---    
---    if FifoWidth < NUMBER_POSITIVE_INTEGER_BITS then 
---      SlvWord := to_slv(intFirstWord mod (2**FifoWidth), FifoWidth) ;
---    else 
---      SlvWord := to_slv(intFirstWord, FifoWidth) ;
---    end if ; 
---    Push(Fifo, SlvWord) ;
---    
---    for i in 2 to Count loop 
---      -- Extra Var added for QuestaSim
---      SlvWord := RV.RandSlv(FifoWidth) ;
---      Push(Fifo, SlvWord) ;
---    end loop ;
   end procedure PushBurstRandom ;
 
   ------------------------------------------------------------
@@ -587,12 +575,14 @@ package body FifoFillPkg_slv is
     constant VectorOfWords  : in    integer_vector ;
     constant FifoWidth      : in    integer 
   ) is
+    constant FifoWidthLessThanIntegerBits : boolean := FifoWidth < NUMBER_POSITIVE_INTEGER_BITS ;
+    constant WORD_MOD : integer := 2** ifelse(FifoWidthLessThanIntegerBits, FifoWidth, 30) ;
   begin
     for i in VectorOfWords'range loop 
       if VectorOfWords(i) < 0 then 
         CheckExpected( Fifo, (FifoWidth downto 1 => 'U') ) ;
-      elsif FifoWidth < NUMBER_POSITIVE_INTEGER_BITS then 
-        CheckExpected( Fifo, to_slv(VectorOfWords(i) mod (2**FifoWidth), FifoWidth) ) ;
+      elsif FifoWidthLessThanIntegerBits then 
+        CheckExpected( Fifo, to_slv(VectorOfWords(i) mod WORD_MOD, FifoWidth) ) ;
       else 
         CheckExpected( Fifo, to_slv(VectorOfWords(i), FifoWidth) ) ;
       end if ; 
@@ -606,9 +596,11 @@ package body FifoFillPkg_slv is
     constant FirstWord    : in    std_logic_vector ;
     constant Count        : in    integer 
   ) is
+    variable Word : std_logic_vector(FirstWord'length-1 downto 0) := FirstWord;
   begin
     for i in 0 to Count-1 loop
-      CheckExpected( Fifo, FirstWord+i ) ;
+      CheckExpected( Fifo, Word ) ;
+      Word := Word + 1 ;
     end loop ; 
   end procedure CheckBurstIncrement ;
 
@@ -621,20 +613,23 @@ package body FifoFillPkg_slv is
     constant FifoWidth    : in    integer := 8
   ) is
     variable intFirstWord : integer ; 
-    variable AdjFirstWord : std_logic_vector(FifoWidth-1 downto 0) ;
+    constant FifoWidthLessThanIntegerBits : boolean := FifoWidth < NUMBER_POSITIVE_INTEGER_BITS ;
+    constant WORD_MOD : integer := 2** ifelse(FifoWidthLessThanIntegerBits, FifoWidth, 30) ;
+    variable Word : std_logic_vector(FifoWidth-1 downto 0) ;
   begin
     if FirstWord < 0 then 
       intFirstWord := -FirstWord ; 
     else
       intFirstWord := FirstWord ; 
     end if ; 
-    if FifoWidth < NUMBER_POSITIVE_INTEGER_BITS then 
-      AdjFirstWord := to_slv(intFirstWord mod (2**FifoWidth), FifoWidth) ;
+    if FifoWidthLessThanIntegerBits then 
+      Word := to_slv(intFirstWord mod WORD_MOD, FifoWidth) ;
     else
-      AdjFirstWord := to_slv(intFirstWord, FifoWidth) ;
+      Word := to_slv(intFirstWord, FifoWidth) ;
     end if ; 
     for i in 0 to Count-1 loop 
-      CheckExpected( Fifo, AdjFirstWord+i ) ;
+      CheckExpected( Fifo, Word ) ;
+      Word := Word + 1 ;
     end loop ;
   end procedure CheckBurstIncrement ;
   
@@ -665,31 +660,13 @@ package body FifoFillPkg_slv is
     constant FifoWidth    : in    integer := 8
   ) is
     variable intFirstWord : integer ; 
---    variable RV           : RandomPType ; 
---    variable SlvWord : std_logic_vector(FifoWidth-1 downto 0) ; 
   begin
     if FirstWord < 0 then 
       intFirstWord := -FirstWord ; 
     else
       intFirstWord := FirstWord ; 
     end if ; 
-    CheckBurstRandom(Fifo, to_slv(intFirstWord, FifoWidth), Count) ; 
-    
---    -- Initialize seed and toss first random value  
---    RV.InitSeed(intFirstWord mod 2**30 + Count, UseNewSeedMethods => TRUE) ;
---    
---    if FifoWidth < NUMBER_POSITIVE_INTEGER_BITS then 
---      SlvWord := to_slv(intFirstWord mod (2**FifoWidth), FifoWidth) ;
---    else 
---      SlvWord := to_slv(intFirstWord, FifoWidth) ;
---    end if ; 
---    CheckExpected(Fifo, SlvWord) ;
---    
---    for i in 2 to Count loop 
---      -- Extra Var added for QuestaSim
---      SlvWord := RV.RandSlv(FifoWidth) ; 
---      CheckExpected(Fifo, SlvWord) ;
---    end loop ;
+    CheckBurstRandom(Fifo, to_slv(intFirstWord, FifoWidth), Count) ;     
   end procedure CheckBurstRandom ;
   
   ------------------------------------------------------------

@@ -157,10 +157,12 @@ begin
           SetAxi4Options(ManagerRec, WRITE_RESPONSE_READY_BEFORE_VALID,    BoolExpected) ;      
         when 2 =>
           -- Set with SetModelOptions 
-          SetModelOptions(ManagerRec, Axi4OptionsType'pos(WRITE_RESPONSE_READY_BEFORE_VALID),    boolean'pos(BoolExpected)) ;      
+          -- SetModelOptions(ManagerRec, Axi4OptionsType'pos(WRITE_RESPONSE_READY_BEFORE_VALID),    boolean'pos(BoolExpected)) ;      
+          set(ManagerRec.params, Axi4OptionsType'pos(WRITE_RESPONSE_READY_BEFORE_VALID),  BoolExpected) ;
         when 3 =>
           -- Set with SetModelOptions 
-          SetModelOptions(ManagerRec, Axi4OptionsType'pos(WRITE_RESPONSE_READY_BEFORE_VALID),    boolean'pos(BoolExpected)) ;      
+          -- SetModelOptions(ManagerRec, Axi4OptionsType'pos(WRITE_RESPONSE_READY_BEFORE_VALID),    boolean'pos(BoolExpected)) ;      
+          set(ManagerRec.params, Axi4OptionsType'pos(WRITE_RESPONSE_READY_BEFORE_VALID),  BoolExpected) ;
         when 4 =>
           -- Set with SetAxi4Options 
           SetAxi4Options(ManagerRec, WRITE_RESPONSE_READY_BEFORE_VALID,    BoolExpected) ;      
@@ -172,8 +174,10 @@ begin
       AffirmIfEqual(TbManagerID, BoolOption, BoolExpected, "WRITE_RESPONSE_READY_BEFORE_VALID") ;
       
       -- Use GetModelOptions
-      GetModelOptions(ManagerRec, Axi4OptionsType'pos(WRITE_RESPONSE_READY_BEFORE_VALID),   IntOption) ;      -- config: 8 bits
-      AffirmIfEqual(TbManagerID, boolean'val(IntOption),   BoolExpected, "WRITE_RESPONSE_READY_BEFORE_VALID") ;  
+      BoolOption := Get(ManagerRec.params, Axi4OptionsType'pos(WRITE_RESPONSE_READY_BEFORE_VALID)) ;      
+      AffirmIfEqual(TbManagerID, BoolOption,   BoolExpected, "WRITE_RESPONSE_READY_BEFORE_VALID") ;  
+--      GetModelOptions(ManagerRec, Axi4OptionsType'pos(WRITE_RESPONSE_READY_BEFORE_VALID),   IntOption) ;      -- config: 8 bits
+--      AffirmIfEqual(TbManagerID, boolean'val(IntOption),   BoolExpected, "WRITE_RESPONSE_READY_BEFORE_VALID") ;  
     end loop ; 
     
     WaitForClock(ManagerRec, 4) ; 
@@ -231,10 +235,10 @@ begin
       AffirmIfEqual(TbSubordinateID, SlvOption,   SlvExpected, "BUSER") ;  
       
       -- Use GetModelOptions
-      GetModelOptions(SubordinateRec, Axi4OptionsType'pos(BUSER),   IntOption) ;      -- config: 8 bits
-      AffirmIfEqual(TbSubordinateID, IntOption,   IntExpected, "BUSER") ;  
-      GetModelOptions(SubordinateRec, Axi4OptionsType'pos(BUSER),   SlvOption) ;      -- config: 8 bits
-      AffirmIfEqual(TbSubordinateID, SlvOption,   SlvExpected, "BUSER") ;  
+      GetModelOptions(SubordinateRec,  Axi4OptionsType'pos(BUSER),   IntOption) ;      -- config: 8 bits
+      AffirmIfEqual  (TbSubordinateID, IntOption,   IntExpected, "BUSER") ;  
+      GetModelOptions(SubordinateRec,  Axi4OptionsType'pos(BUSER),   SlvOption) ;      -- config: 8 bits
+      AffirmIfEqual  (TbSubordinateID, SlvOption,   SlvExpected, "BUSER") ;  
     end loop ; 
     
     -- Test WRITE_ADDRESS_READY_BEFORE_VALID - boolean 
@@ -250,10 +254,12 @@ begin
           SetAxi4Options(SubordinateRec, WRITE_ADDRESS_READY_BEFORE_VALID,    BoolExpected) ;      
         when 2 =>
           -- Set with SetModelOptions 
-          SetModelOptions(SubordinateRec, Axi4OptionsType'pos(WRITE_ADDRESS_READY_BEFORE_VALID),    boolean'pos(BoolExpected)) ;      
+          -- SetModelOptions(SubordinateRec, Axi4OptionsType'pos(WRITE_ADDRESS_READY_BEFORE_VALID),    boolean'pos(BoolExpected)) ;      
+          set(SubordinateRec.params, Axi4OptionsType'pos(WRITE_ADDRESS_READY_BEFORE_VALID),  BoolExpected) ;
         when 3 =>
           -- Set with SetModelOptions 
-          SetModelOptions(SubordinateRec, Axi4OptionsType'pos(WRITE_ADDRESS_READY_BEFORE_VALID),    boolean'pos(BoolExpected)) ;      
+          -- SetModelOptions(SubordinateRec, Axi4OptionsType'pos(WRITE_ADDRESS_READY_BEFORE_VALID),    boolean'pos(BoolExpected)) ;      
+          set(SubordinateRec.params, Axi4OptionsType'pos(WRITE_ADDRESS_READY_BEFORE_VALID),  BoolExpected) ;
         when 4 =>
           -- Set with SetAxi4Options 
           SetAxi4Options(SubordinateRec, WRITE_ADDRESS_READY_BEFORE_VALID,    BoolExpected) ;      
@@ -265,8 +271,10 @@ begin
       AffirmIfEqual(TbSubordinateID, BoolOption, BoolExpected, "WRITE_ADDRESS_READY_BEFORE_VALID") ;
       
       -- Use GetModelOptions
-      GetModelOptions(SubordinateRec, Axi4OptionsType'pos(WRITE_ADDRESS_READY_BEFORE_VALID),   IntOption) ;      -- config: 8 bits
-      AffirmIfEqual(TbSubordinateID, boolean'val(IntOption),   BoolExpected, "WRITE_ADDRESS_READY_BEFORE_VALID") ;  
+--      GetModelOptions(SubordinateRec, Axi4OptionsType'pos(WRITE_ADDRESS_READY_BEFORE_VALID),   IntOption) ;      -- config: 8 bits
+--      AffirmIfEqual(TbSubordinateID, boolean'val(IntOption),   BoolExpected, "WRITE_ADDRESS_READY_BEFORE_VALID") ;  
+      BoolOption := Get(SubordinateRec.params, Axi4OptionsType'pos(WRITE_ADDRESS_READY_BEFORE_VALID)) ;      
+      AffirmIfEqual(TbSubordinateID, BoolOption,   BoolExpected, "WRITE_ADDRESS_READY_BEFORE_VALID") ;  
     end loop ; 
 
     WaitForClock(SubordinateRec, 2) ;

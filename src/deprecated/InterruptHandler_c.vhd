@@ -64,11 +64,11 @@ port (
   IntReq          : in   std_logic_vector(gIntReq'range) ;
 
   -- From TestCtrl
-  TransRec        : view AddressBusVerificationComponentView of AddressBusRecType ;
-  InterruptRec    : view AddressBusVerificationComponentView of AddressBusRecType ;
+  TransRec        : inout AddressBusRecType ;
+  InterruptRec    : inout AddressBusRecType ;
   
   -- To Verification Component
-  VCRec           : view AddressBusTestCtrlView of AddressBusRecType 
+  VCRec           : inout AddressBusRecType
 ) ;
 end entity InterruptHandler ;
 architecture Behavioral of InterruptHandler is

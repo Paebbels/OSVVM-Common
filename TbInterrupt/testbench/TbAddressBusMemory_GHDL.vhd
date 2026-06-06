@@ -53,6 +53,8 @@ library OSVVM_AXI4 ;
 library osvvm_common ;
   context osvvm_common.OsvvmCommonContext ;
 
+use work.TestCtrlComponentPkg.all ;
+
 entity TbAddressBusMemory is
 generic (
   NUM_INTERRUPTS       : integer := 1 ;
@@ -120,20 +122,6 @@ architecture TestHarness of TbAddressBusMemory is
       User(7 downto 0)
     )
   ) ;
-
-  component TestCtrl is
-    port (
-      -- Global Signal Interface
-      nReset            : In    std_logic ;
-
-      -- Transaction Interfaces
-      ManagerRec        : inout AddressBusRecType ;
-      InterruptRec      : inout AddressBusRecType ;
-      SubordinateRec    : inout AddressBusRecType ;
-      
-      InterruptRecArray : inout StreamRecArrayType 
-    ) ;
-  end component TestCtrl ;
 
   signal IntReq            : std_logic_vector(gIntReq'range) := (others => '0');
 --  signal InterruptRecArray : InterruptGeneratorRecArrayType(0 downto 0) ; -- GHDL does not like partially constrained arrays
@@ -282,6 +270,23 @@ begin
   ) ;
     
   ------------------------------------------------------------
+  InterruptGen : for i in InterruptRecArray'range generate
+  ------------------------------------------------------------
+    InterruptGeneratorBit_1 : InterruptGeneratorBit 
+    generic map (
+      MODEL_ID_NAME    => "InterruptGeneratorBit_" & to_string(i),
+      POLARITY         => '1'
+    ) 
+    port map (
+      -- Interrupt Input
+      IntReq          => IntReq(i), 
+      
+      -- Transaction port
+      TransRec        => InterruptRecArray(i)
+    ) ;
+  end generate InterruptGen ;
+
+  ------------------------------------------------------------
   Memory_1 : Axi4Memory
   ------------------------------------------------------------
   port map (
@@ -337,23 +342,6 @@ begin
     -- To Verification Component
     VCRec        => VCRec
   ) ;
-
-  ------------------------------------------------------------
-  InterruptGen : for i in InterruptRecArray'range generate
-  ------------------------------------------------------------
-    InterruptGeneratorBit_1 : InterruptGeneratorBit 
-    generic map (
-      MODEL_ID_NAME    => "InterruptGeneratorBit_" & to_string(i),
-      POLARITY         => '1'
-    ) 
-    port map (
-      -- Interrupt Input
-      IntReq          => IntReq(i), 
-      
-      -- Transaction port
-      TransRec        => InterruptRecArray(i)
-    ) ;
-  end generate InterruptGen ;
 
   ------------------------------------------------------------
   Monitor : process(IntReq)

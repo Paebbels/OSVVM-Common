@@ -1205,6 +1205,10 @@ package body AddressBusTransactionArrayPkg is
     TransactionRec(Index).Operation     <= SET_MODEL_OPTIONS ;
     TransactionRec(Index).Options       <= Option ;
     TransactionRec(Index).IntToModel    <= to_integer(OptVal) ;
+    if OptVal'length > 32 then
+      Alert("SetModelOptions: Option " & to_string(Option) & 
+        " OptVal: " & to_string(OptVal) & " length > 32 bits.", ERROR) ;
+    end if ;
     AddressBusArrayRequestTransaction(TransactionRec => TransactionRec, Index => Index) ;
   end procedure SetModelOptions ;
  

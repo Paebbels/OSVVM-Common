@@ -53,6 +53,8 @@ library OSVVM_AXI4 ;
 library osvvm_common ;
   context osvvm_common.OsvvmCommonContext ;
 
+  use work.TestCtrlComponentPkg.all ;
+
 entity TbAddressBusMemory is
 generic (
   NUM_INTERRUPTS       : integer := 1 ;
@@ -121,19 +123,6 @@ architecture TestHarness of TbAddressBusMemory is
     )
   ) ;
 
-  component TestCtrl is
-    port (
-      -- Global Signal Interface
-      nReset            : In    std_logic ;
-
-      -- Transaction Interfaces
-      ManagerRec        : inout AddressBusRecType ;
-      InterruptRec      : inout AddressBusRecType ;
-      SubordinateRec    : inout AddressBusRecType ;
-      
-      InterruptRecArray : inout StreamRecArrayType 
-    ) ;
-  end component TestCtrl ;
 
   signal IntReq            : std_logic_vector(gIntReq'range) := (others => '0');
 --  signal InterruptRecArray : InterruptGeneratorRecArrayType(0 downto 0) ; -- GHDL does not like partially constrained arrays

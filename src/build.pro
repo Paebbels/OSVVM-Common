@@ -70,8 +70,14 @@ analyze AddressBusVersionCompatibilityPkg.vhd
 
 # Interrupt
 analyze InterruptGlobalSignalPkg.vhd   [NoNullRangeWarning]
-analyze InterruptHandler.vhd
-analyze InterruptHandlerComponentPkg.vhd
+if {$::osvvm::VhdlVersion >= 2019 && $::osvvm::Supports2019Interface}  {
+  analyze InterruptHandler.vhd
+  analyze InterruptHandlerComponentPkg.vhd
+} else {
+  analyze deprecated/InterruptHandler_c.vhd
+  analyze deprecated/InterruptHandlerComponentPkg_c.vhd
+}
+
 analyze InterruptGeneratorBit.vhd
 analyze InterruptGeneratorBitVti.vhd   [NoNullRangeWarning]
 # analyze InterruptGenerator.vhd
