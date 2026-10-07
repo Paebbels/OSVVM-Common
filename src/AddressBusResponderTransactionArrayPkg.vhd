@@ -47,41 +47,41 @@ library ieee ;
 
 library osvvm ;
     context osvvm.OsvvmContext ;
-    
-  use work.AddressBusTransactionPkg.all; 
-  use work.AddressBusTransactionArrayPkg.AddressBusArrayRequestTransaction; 
+
+  use work.AddressBusTransactionPkg.all;
+  use work.AddressBusTransactionArrayPkg.AddressBusArrayRequestTransaction;
 
 package AddressBusResponderTransactionArrayPkg is
   -- ========================================================
   --  Types of Transactions
   --  A transaction may be either a directive or an interface transaction.
   --
-  --  Directive transactions interact with the verification component 
+  --  Directive transactions interact with the verification component
   --  without generating any transactions or interface waveforms.
   --
   --  An interface transaction results in interface signaling to the DUT.
   --
-  --  A blocking transaction is an interface transaction that does not 
-  --  does not return (complete) until the interface operation   
+  --  A blocking transaction is an interface transaction that does not
+  --  does not return (complete) until the interface operation
   --  requested by the transaction has completed.
   --
   --  An asynchronous transaction is nonblocking interface transaction
-  --  that returns before the transaction has completed - typically 
-  --  immediately and before the transaction has started. 
+  --  that returns before the transaction has completed - typically
+  --  immediately and before the transaction has started.
   --
-  --  A Try transaction is nonblocking interface transaction that 
-  --  checks to see if transaction information is available, 
-  --  such as read data, and if it is returns it.  
+  --  A Try transaction is nonblocking interface transaction that
+  --  checks to see if transaction information is available,
+  --  such as read data, and if it is returns it.
   --
   -- ========================================================
-  
-  
+
+
   -- ========================================================
   --  Interface Independent Transactions
   --  These transactions work independent of the interface.
   --  Recommended for all tests that verify internal design functionality.
   --  Many are blocking transactions which do not return (complete)
-  --  until the interface operation requested by the transaction  
+  --  until the interface operation requested by the transaction
   --  has completed.
   --  Some are asynchronous, which means they return before the
   --  transaction is complete - typically even before it starts.
@@ -89,9 +89,9 @@ package AddressBusResponderTransactionArrayPkg is
   -- ========================================================
   ------------------------------------------------------------
   procedure GetWrite (
-  -- Blocking write transaction.  
+  -- Blocking write transaction.
   -- Block until the write address and data are available.
-  -- oData variable should be sized to match the size of the data 
+  -- oData variable should be sized to match the size of the data
   -- being transferred.
   ------------------------------------------------------------
     signal   TransactionRec  : InOut AddressBusRecArrayType ;
@@ -100,13 +100,13 @@ package AddressBusResponderTransactionArrayPkg is
     variable oData           : Out   std_logic_vector ;
     constant StatusMsgOn     : In    boolean := false
   ) ;
-  
+
   ------------------------------------------------------------
   procedure TryGetWrite (
-  -- Try write transaction.  
-  -- If a write cycle has already completed return Address and Data, 
-  -- and return Available as TRUE, otherwise, return Available as FALSE. 
-  -- oData variable should be sized to match the size of the data 
+  -- Try write transaction.
+  -- If a write cycle has already completed return Address and Data,
+  -- and return Available as TRUE, otherwise, return Available as FALSE.
+  -- oData variable should be sized to match the size of the data
   -- being transferred.
   ------------------------------------------------------------
     signal   TransactionRec  : InOut AddressBusRecArrayType ;
@@ -119,9 +119,9 @@ package AddressBusResponderTransactionArrayPkg is
 
   ------------------------------------------------------------
   procedure SendRead (
-  -- Blocking Read transaction.   
+  -- Blocking Read transaction.
   -- Block until address is available and data is sent.
-  -- iData variable should be sized to match the size of the data 
+  -- iData variable should be sized to match the size of the data
   -- being transferred.
   ------------------------------------------------------------
     signal   TransactionRec  : InOut AddressBusRecArrayType ;
@@ -130,14 +130,14 @@ package AddressBusResponderTransactionArrayPkg is
     constant iData           : In    std_logic_vector ;
     constant StatusMsgOn     : In    boolean := false
   ) ;
-  
+
   ------------------------------------------------------------
   procedure TrySendRead (
-  -- Try Read transaction.   
-  -- If a read address already been received return Address, 
+  -- Try Read transaction.
+  -- If a read address already been received return Address,
   -- send iData as the read data, and return Available as TRUE,
   -- otherwise return Available as FALSE.
-  -- iData variable should be sized to match the size of the data 
+  -- iData variable should be sized to match the size of the data
   -- being transferred.
   ------------------------------------------------------------
     signal   TransactionRec  : InOut AddressBusRecArrayType ;
@@ -147,31 +147,31 @@ package AddressBusResponderTransactionArrayPkg is
     variable Available       : Out   boolean ;
     constant StatusMsgOn     : In    boolean := false
   ) ;
-  
-  
+
+
   -- ========================================================
   --  Interface Specific Transactions
   --  Support split transaction interfaces - such as AXI which
-  --  independently operates the write address, write data, 
-  --  write response, read address, and read data interfaces. 
-  --  For split transaction interfaces, these transactions are 
-  --  required to fully test the interface characteristics.  
-  --  Most of these transactions are asynchronous.  
+  --  independently operates the write address, write data,
+  --  write response, read address, and read data interfaces.
+  --  For split transaction interfaces, these transactions are
+  --  required to fully test the interface characteristics.
+  --  Most of these transactions are asynchronous.
   -- ========================================================
   ------------------------------------------------------------
   procedure GetWriteAddress (
-  -- Blocking write address transaction.  
+  -- Blocking write address transaction.
   ------------------------------------------------------------
     signal   TransactionRec  : InOut AddressBusRecArrayType ;
     constant Index           : In    integer   ;
     variable oAddr           : Out   std_logic_vector ;
     constant StatusMsgOn     : In    boolean := false
   ) ;
-  
+
   ------------------------------------------------------------
   procedure TryGetWriteAddress (
-  -- Try write address transaction.  
-  -- If a write address cycle has already completed return oAddr and 
+  -- Try write address transaction.
+  -- If a write address cycle has already completed return oAddr and
   -- return Available as TRUE, otherwise, return Available as FALSE.
   ------------------------------------------------------------
     signal   TransactionRec  : InOut AddressBusRecArrayType ;
@@ -183,9 +183,9 @@ package AddressBusResponderTransactionArrayPkg is
 
   ------------------------------------------------------------
   procedure GetWriteData (
-  -- Blocking write data transaction.  
-  -- oData should be sized to match the size of the data 
-  -- being transferred.  
+  -- Blocking write data transaction.
+  -- oData should be sized to match the size of the data
+  -- being transferred.
   ------------------------------------------------------------
     signal   TransactionRec  : InOut AddressBusRecArrayType ;
     constant Index           : In    integer   ;
@@ -193,14 +193,14 @@ package AddressBusResponderTransactionArrayPkg is
     variable oData           : Out   std_logic_vector ;
     constant StatusMsgOn     : In    boolean := false
   ) ;
-  
+
   ------------------------------------------------------------
   procedure TryGetWriteData (
-  -- Try write data transaction.  
-  -- If a write data cycle has already completed return oData and 
+  -- Try write data transaction.
+  -- If a write data cycle has already completed return oData and
   -- return Available as TRUE, otherwise, return Available as FALSE.
-  -- oData should be sized to match the size of the data 
-  -- being transferred.  
+  -- oData should be sized to match the size of the data
+  -- being transferred.
   ------------------------------------------------------------
     signal   TransactionRec  : InOut AddressBusRecArrayType ;
     constant Index           : In    integer   ;
@@ -209,11 +209,11 @@ package AddressBusResponderTransactionArrayPkg is
     variable Available       : Out   boolean ;
     constant StatusMsgOn     : In    boolean := false
   ) ;
-  
+
   ------------------------------------------------------------
   procedure GetWriteData (
-  -- Blocking write data transaction.  
-  -- oData should be sized to match the size of the data 
+  -- Blocking write data transaction.
+  -- oData should be sized to match the size of the data
   -- being transferred.  iAddr = 0
   ------------------------------------------------------------
     signal   TransactionRec  : InOut AddressBusRecArrayType ;
@@ -224,10 +224,10 @@ package AddressBusResponderTransactionArrayPkg is
 
   ------------------------------------------------------------
   procedure TryGetWriteData (
-  -- Try write data transaction.  
-  -- If a write data cycle has already completed return oData and 
+  -- Try write data transaction.
+  -- If a write data cycle has already completed return oData and
   -- return Available as TRUE, otherwise, return Available as FALSE.
-  -- oData should be sized to match the size of the data 
+  -- oData should be sized to match the size of the data
   -- being transferred.  iAddr = 0
   ------------------------------------------------------------
     signal   TransactionRec  : InOut AddressBusRecArrayType ;
@@ -236,21 +236,21 @@ package AddressBusResponderTransactionArrayPkg is
     variable Available       : Out   boolean ;
     constant StatusMsgOn     : In    boolean := false
   ) ;
-  
+
   ------------------------------------------------------------
   procedure GetReadAddress (
-  -- Blocking Read address transaction.   
+  -- Blocking Read address transaction.
   ------------------------------------------------------------
     signal   TransactionRec  : InOut AddressBusRecArrayType ;
     constant Index           : In    integer   ;
     variable oAddr           : Out   std_logic_vector ;
     constant StatusMsgOn     : In    boolean := false
   ) ;
-  
+
   ------------------------------------------------------------
   procedure TryGetReadAddress (
-  -- Try read address transaction.  
-  -- If a read address cycle has already completed return oAddr and 
+  -- Try read address transaction.
+  -- If a read address cycle has already completed return oAddr and
   -- return Available as TRUE, otherwise, return Available as FALSE.
   ------------------------------------------------------------
     signal   TransactionRec  : InOut AddressBusRecArrayType ;
@@ -259,11 +259,11 @@ package AddressBusResponderTransactionArrayPkg is
     variable Available       : Out   boolean ;
     constant StatusMsgOn     : In    boolean := false
   ) ;
-  
+
   ------------------------------------------------------------
   procedure SendReadData (
-  -- Blocking Send Read Data transaction.  
-  -- iData should be sized to match the size of the data 
+  -- Blocking Send Read Data transaction.
+  -- iData should be sized to match the size of the data
   -- being transferred.
   ------------------------------------------------------------
     signal   TransactionRec  : InOut AddressBusRecArrayType ;
@@ -271,19 +271,19 @@ package AddressBusResponderTransactionArrayPkg is
     constant iData           : In    std_logic_vector ;
     constant StatusMsgOn     : In    boolean := false
   ) ;
-  
+
   ------------------------------------------------------------
   procedure SendReadDataAsync (
-  -- Asynchronous Send Read Data transaction.  
-  -- iData should be sized to match the size of the data 
+  -- Asynchronous Send Read Data transaction.
+  -- iData should be sized to match the size of the data
   -- being transferred.
   ------------------------------------------------------------
     signal   TransactionRec  : InOut AddressBusRecArrayType ;
     constant Index           : In    integer   ;
     constant iData           : In    std_logic_vector ;
     constant StatusMsgOn     : In    boolean := false
-  ) ;   
-  
+  ) ;
+
 end package AddressBusResponderTransactionArrayPkg ;
 
 -- /////////////////////////////////////////////////////////////////////////////////////////
@@ -308,8 +308,8 @@ package body AddressBusResponderTransactionArrayPkg is
     TransactionRec(Index).DataWidth     <= oData'length ;
     TransactionRec(Index).StatusMsgOn   <= StatusMsgOn ;
     AddressBusArrayRequestTransaction(TransactionRec => TransactionRec, Index => Index) ;
-    oAddr  := FromTransaction(TransactionRec(Index).Address, oAddr'length) ;
-    oData  := FromTransaction(TransactionRec(Index).DataFromModel, oData'length) ;
+    oAddr  := SafeResize(TransactionRec(Index).Address, oAddr'length) ;
+    oData  := SafeResize(TransactionRec(Index).DataFromModel, oData'length) ;
   end procedure GetWrite ;
 
   ------------------------------------------------------------
@@ -330,8 +330,8 @@ package body AddressBusResponderTransactionArrayPkg is
     TransactionRec(Index).DataWidth     <= oData'length ;
     TransactionRec(Index).StatusMsgOn   <= StatusMsgOn ;
     AddressBusArrayRequestTransaction(TransactionRec => TransactionRec, Index => Index) ;
-    oAddr  := FromTransaction(TransactionRec(Index).Address, oAddr'length) ;
-    oData  := FromTransaction(TransactionRec(Index).DataFromModel, oData'length) ;
+    oAddr  := SafeResize(TransactionRec(Index).Address, oAddr'length) ;
+    oData  := SafeResize(TransactionRec(Index).DataFromModel, oData'length) ;
     Available := TransactionRec(Index).BoolFromModel ;
   end procedure TryGetWrite ;
 
@@ -350,9 +350,9 @@ package body AddressBusResponderTransactionArrayPkg is
     TransactionRec(Index).AddrWidth     <= oAddr'length ;
     TransactionRec(Index).StatusMsgOn   <= StatusMsgOn ;
     AddressBusArrayRequestTransaction(TransactionRec => TransactionRec, Index => Index) ;
-    oAddr  := FromTransaction(TransactionRec(Index).Address, oAddr'length) ;
+    oAddr  := SafeResize(TransactionRec(Index).Address, oAddr'length) ;
   end procedure GetWriteAddress ;
-  
+
   ------------------------------------------------------------
   procedure TryGetWriteAddress (
   -- Return address if available otherwise return false
@@ -369,15 +369,15 @@ package body AddressBusResponderTransactionArrayPkg is
     TransactionRec(Index).AddrWidth     <= oAddr'length ;
     TransactionRec(Index).StatusMsgOn   <= StatusMsgOn ;
     AddressBusArrayRequestTransaction(TransactionRec => TransactionRec, Index => Index) ;
-    oAddr  := FromTransaction(TransactionRec(Index).Address, oAddr'length) ;
+    oAddr  := SafeResize(TransactionRec(Index).Address, oAddr'length) ;
     Available := TransactionRec(Index).BoolFromModel ;
   end procedure TryGetWriteAddress ;
 
   ------------------------------------------------------------
   procedure GetWriteData (
-  -- Blocking write data transaction.  
-  -- oData should be sized to match the size of the data 
-  -- being transferred.  
+  -- Blocking write data transaction.
+  -- oData should be sized to match the size of the data
+  -- being transferred.
   ------------------------------------------------------------
     signal   TransactionRec  : InOut AddressBusRecArrayType ;
     constant Index           : In    integer   ;
@@ -394,16 +394,16 @@ package body AddressBusResponderTransactionArrayPkg is
     TransactionRec(Index).DataWidth     <= oData'length ;
     TransactionRec(Index).StatusMsgOn   <= StatusMsgOn ;
     AddressBusArrayRequestTransaction(TransactionRec => TransactionRec, Index => Index) ;
-    oData  := FromTransaction(TransactionRec(Index).DataFromModel, oData'length) ;
+    oData  := SafeResize(TransactionRec(Index).DataFromModel, oData'length) ;
   end procedure GetWriteData ;
-  
+
   ------------------------------------------------------------
   procedure TryGetWriteData (
-  -- Try write data transaction.  
-  -- If a write data cycle has already completed return oData and 
+  -- Try write data transaction.
+  -- If a write data cycle has already completed return oData and
   -- return Available as TRUE, otherwise, return Available as FALSE.
-  -- oData should be sized to match the size of the data 
-  -- being transferred.  
+  -- oData should be sized to match the size of the data
+  -- being transferred.
   ------------------------------------------------------------
     signal   TransactionRec  : InOut AddressBusRecArrayType ;
     constant Index           : In    integer   ;
@@ -421,10 +421,10 @@ package body AddressBusResponderTransactionArrayPkg is
     TransactionRec(Index).DataWidth     <= oData'length ;
     TransactionRec(Index).StatusMsgOn   <= StatusMsgOn ;
     AddressBusArrayRequestTransaction(TransactionRec => TransactionRec, Index => Index) ;
-    oData  := FromTransaction(TransactionRec(Index).DataFromModel, oData'length) ;
+    oData  := SafeResize(TransactionRec(Index).DataFromModel, oData'length) ;
     Available := TransactionRec(Index).BoolFromModel ;
   end procedure TryGetWriteData ;
-  
+
   ------------------------------------------------------------
   procedure GetWriteData (
   -- Blocks until Data is available
@@ -467,12 +467,12 @@ package body AddressBusResponderTransactionArrayPkg is
     TransactionRec(Index).Operation     <= READ_OP ;
     TransactionRec(Index).AddrWidth     <= oAddr'length ;
     TransactionRec(Index).DataWidth     <= iData'length ;
-    TransactionRec(Index).DataToModel   <= ToTransaction(iData, TransactionRec(Index).DataToModel'length) ;
+    TransactionRec(Index).DataToModel   <= SafeResize(iData, TransactionRec(Index).DataToModel'length) ;
     TransactionRec(Index).StatusMsgOn   <= StatusMsgOn ;
     AddressBusArrayRequestTransaction(TransactionRec => TransactionRec, Index => Index) ;
-    oAddr  := FromTransaction(TransactionRec(Index).Address, oAddr'length) ;
+    oAddr  := SafeResize(TransactionRec(Index).Address, oAddr'length) ;
   end procedure SendRead ;
-  
+
   ------------------------------------------------------------
   procedure TrySendRead (
   -- Return address if available, send data if address available
@@ -489,13 +489,13 @@ package body AddressBusResponderTransactionArrayPkg is
     TransactionRec(Index).Operation     <= ASYNC_READ ;
     TransactionRec(Index).AddrWidth     <= oAddr'length ;
     TransactionRec(Index).DataWidth     <= iData'length ;
-    TransactionRec(Index).DataToModel   <= ToTransaction(iData, TransactionRec(Index).DataToModel'length) ;
+    TransactionRec(Index).DataToModel   <= SafeResize(iData, TransactionRec(Index).DataToModel'length) ;
     TransactionRec(Index).StatusMsgOn   <= StatusMsgOn ;
     AddressBusArrayRequestTransaction(TransactionRec => TransactionRec, Index => Index) ;
-    oAddr  := FromTransaction(TransactionRec(Index).Address, oAddr'length) ;
+    oAddr  := SafeResize(TransactionRec(Index).Address, oAddr'length) ;
     Available  := TransactionRec(Index).BoolFromModel ;
   end procedure TrySendRead ;
-    
+
   ------------------------------------------------------------
   procedure GetReadAddress (
   -- Block until address is available
@@ -511,9 +511,9 @@ package body AddressBusResponderTransactionArrayPkg is
     TransactionRec(Index).AddrWidth     <= oAddr'length ;
     TransactionRec(Index).StatusMsgOn   <= StatusMsgOn ;
     AddressBusArrayRequestTransaction(TransactionRec => TransactionRec, Index => Index) ;
-    oAddr  := FromTransaction(TransactionRec(Index).Address, oAddr'length) ;
+    oAddr  := SafeResize(TransactionRec(Index).Address, oAddr'length) ;
   end procedure GetReadAddress ;
-  
+
   ------------------------------------------------------------
   procedure TryGetReadAddress (
   -- Return read address if available, otherwise return false on Available
@@ -530,10 +530,10 @@ package body AddressBusResponderTransactionArrayPkg is
     TransactionRec(Index).AddrWidth     <= oAddr'length ;
     TransactionRec(Index).StatusMsgOn   <= StatusMsgOn ;
     AddressBusArrayRequestTransaction(TransactionRec => TransactionRec, Index => Index) ;
-    oAddr  := FromTransaction(TransactionRec(Index).Address, oAddr'length) ;
+    oAddr  := SafeResize(TransactionRec(Index).Address, oAddr'length) ;
     Available  := TransactionRec(Index).BoolFromModel ;
   end procedure TryGetReadAddress ;
-  
+
   ------------------------------------------------------------
   procedure SendReadData (
   -- Block until data is done
@@ -547,11 +547,11 @@ package body AddressBusResponderTransactionArrayPkg is
     -- Put values in record
     TransactionRec(Index).Operation     <= READ_DATA ;
     TransactionRec(Index).DataWidth     <= iData'length ;
-    TransactionRec(Index).DataToModel   <= ToTransaction(iData, TransactionRec(Index).DataToModel'length) ;
+    TransactionRec(Index).DataToModel   <= SafeResize(iData, TransactionRec(Index).DataToModel'length) ;
     TransactionRec(Index).StatusMsgOn   <= StatusMsgOn ;
     AddressBusArrayRequestTransaction(TransactionRec => TransactionRec, Index => Index) ;
   end procedure SendReadData ;
-  
+
   ------------------------------------------------------------
   procedure SendReadDataAsync (
   -- Queue Read Data
@@ -565,9 +565,9 @@ package body AddressBusResponderTransactionArrayPkg is
     -- Put values in record
     TransactionRec(Index).Operation     <= ASYNC_READ_DATA ;
     TransactionRec(Index).DataWidth     <= iData'length ;
-    TransactionRec(Index).DataToModel   <= ToTransaction(iData, TransactionRec(Index).DataToModel'length) ;
+    TransactionRec(Index).DataToModel   <= SafeResize(iData, TransactionRec(Index).DataToModel'length) ;
     TransactionRec(Index).StatusMsgOn   <= StatusMsgOn ;
     AddressBusArrayRequestTransaction(TransactionRec => TransactionRec, Index => Index) ;
-  end procedure SendReadDataAsync ;  
-  
+  end procedure SendReadDataAsync ;
+
 end package body AddressBusResponderTransactionArrayPkg ;
