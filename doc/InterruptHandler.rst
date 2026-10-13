@@ -27,7 +27,7 @@ When using the interrupt handler, the testbench architecture (also called test h
 (:vhdlcode:`TestCtrl`), verification components (:vhdlcode:`Axi4Manager` and :vhdlcode:`Axi4Memory`), the
 :vhdlcode:`InterruptHandler` verification component, and DUT as shown in :ref:`Figure 1 <VC/InterruptHandler/Figure1>`.
 
-.. figure:: images/InterruptHandler/Figure01.png
+.. figure:: _static/images/InterruptHandler/Figure01.png
    :width: 427px
    :name: VC/InterruptHandler/Figure1
 
@@ -40,7 +40,7 @@ directory :file:`OsvvmLibraries/Common/TbInterrupt`. It creates a minimal system
 removed and instead the :vhdlcode:`Axi4Manager` is connected directly to the :vhdlcode:`Axi4Memory`. Without the DUT,
 the Interrupt source comes from :vhdlcode:`TestCtrl`.
 
-.. figure:: images/InterruptHandler/Figure02.png
+.. figure:: _static/images/InterruptHandler/Figure02.png
    :width: 401px
    :name: VC/InterruptHandler/Figure2
 
