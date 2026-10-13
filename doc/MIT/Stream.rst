@@ -3,11 +3,6 @@
 Stream Model Independent Transactions
 #####################################
 
-.. _MIT/Stream/Overview:
-
-Overview
-********
-
 The Stream Model Independent Transaction package (:file:`StreamTransactionPkg.vhd`) defines a transaction interface (a
 record for communication between the test sequencer and the verification component) and transaction initiation
 procedures that are suitable for Stream Interfaces.

@@ -3,11 +3,6 @@
 Interrupt Handler
 #################
 
-.. _VC/InterruptHandler/Overview:
-
-Overview
-********
-
 When software is running and an interrupt occurs, the normal thread of execution is interrupted, and the interrupt
 thread of execution is started. When the interrupt thread completes, the previous thread is resumed.
 

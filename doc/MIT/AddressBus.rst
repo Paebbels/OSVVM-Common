@@ -3,11 +3,6 @@
 Address Bus Model Independent Transactions
 ##########################################
 
-.. _MIT/AddressBus/Overview:
-
-Overview
-********
-
 The Address Bus Model Independent Transaction package (:file:`AddressBusTransactionPkg.vhd`) defines a transaction
 interface (a record for communication between the test sequencer and the verification component) and transaction
 initiation procedures that are suitable for Address Bus Interfaces.
